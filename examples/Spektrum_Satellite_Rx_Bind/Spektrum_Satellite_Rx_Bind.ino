@@ -2,10 +2,12 @@
 // Based on sketch by Sam Kelly, sam@3drobotics.com
 // with info from rcgroups, mikrokopter, etc.
 // Confirmed works with Arduino Pro Mini 3.3V/5V 8MHz/16MHz
-//  Should work with any other Arduino
+// Should work with any other Arduino
+// Now works with Orange Receivers
 
-int Bind_pin = 2;
-int Rx_PowerPin = 10;
+int Bind_pin = 3;
+int Rx_PowerPin = 1;
+unsigned long time;
 
 void setup()
 {
@@ -25,11 +27,11 @@ void loop()
 
 void SpektrumBind(void)
 {
-  unsigned long time;
   unsigned char connected = 0;
 
   // Connect the power for the Rx to RX_powerpin this is brought
   // high to turn on the Rx.
+  delay(5);  // Delay added to work with Orange Receivers
   digitalWrite(Rx_PowerPin, HIGH);
 
   UCSR0B &= ~(1 << RXCIE0); // disable Rx interrupt
@@ -48,7 +50,6 @@ void SpektrumBind(void)
 
   if(connected)
   {
-    //mySerial.println("Connected! Bind now!");
     DDRD |= (1 << DDD0); // Rx as output
 
     delay(90); // Delay after Rx startup
@@ -75,10 +76,10 @@ void SpektrumBind(void)
     //    PORTD |= (1 << PORTD0);         delayMicroseconds(116);
     //    PORTD &= ~(1 << PORTD0);        delayMicroseconds(116);  // 6 LOW
     //    PORTD |= (1 << PORTD0);         delayMicroseconds(116);
-    //    PORTD &= ~(1 << PORTD0); delayMicroseconds(116);   // 7 LOW
-    //    PORTD |= (1 << PORTD0); delayMicroseconds(116);    
-    //    PORTD &= ~(1 << PORTD0); delayMicroseconds(116);   // 8 LOW
-    //    PORTD |= (1 << PORTD0); delayMicroseconds(116);   
+    //    PORTD &= ~(1 << PORTD0); 		  delayMicroseconds(116);   // 7 LOW
+    //    PORTD |= (1 << PORTD0);	  	  delayMicroseconds(116);    
+    //    PORTD &= ~(1 << PORTD0); 		  delayMicroseconds(116);   // 8 LOW
+    //    PORTD |= (1 << PORTD0); 		  delayMicroseconds(116);   
 
   }
   else
